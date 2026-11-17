@@ -1,0 +1,472 @@
+<!doctype html><html><head><meta charset=utf8><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e6b55"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="حاسبة البلوت"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/icon-192.png"><title>حاسبة البلوت</title><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow column, a two-team scoreboard on top, the round form below, history last. */
+:root {
+  --bg: #f1f4f1;
+  --surface: #ffffff;
+  --fg: #13201a;
+  --muted: #5d6c64;
+  --line: #d6ddd8;
+  --team-a: #0e6b55;
+  --team-b: #b0521a;
+  --on-accent: #ffffff;
+  --good: #1d7a3a;
+  --bad: #b3261e;
+  --display: "Reem Kufi", "Segoe UI", Tahoma, sans-serif;
+  --body: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1612; --surface: #17211c; --fg: #e8efea; --muted: #93a39a; --line: #2a3832;
+    --team-a: #3fc3a0; --team-b: #f0925a; --on-accent: #0b1410; --good: #5fd283; --bad: #ff8a80;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1612; --surface: #17211c; --fg: #e8efea; --muted: #93a39a; --line: #2a3832;
+  --team-a: #3fc3a0; --team-b: #f0925a; --on-accent: #0b1410; --good: #5fd283; --bad: #ff8a80;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.6;
+  padding-block: 16px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 520px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+h1, h2 { font-family: var(--display); margin: 0; font-weight: 700; }
+h1 { font-size: 26px; }
+h2 { font-size: 18px; }
+button { font-family: inherit; font-size: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 3px solid var(--team-a); outline-offset: 2px; }
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.target { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; }
+.target input { width: 64px; text-align: center; }
+
+input[type=number], input[type=text] {
+  font-family: inherit; font-size: 16px; color: var(--fg); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-width: 0;
+}
+
+.board { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.team { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.team input[type=text] { font-weight: 600; text-align: center; border-color: transparent; background: transparent; padding: 4px; font-size: 16px; }
+.team input[type=text]:focus { border-color: var(--line); background: var(--bg); }
+.score { font-family: var(--display); font-size: 56px; line-height: 1; text-align: center; font-variant-numeric: tabular-nums; }
+.team.a .score { color: var(--team-a); }
+.team.b .score { color: var(--team-b); }
+.track { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.track i { display: block; height: 100%; width: 0; transition: width .3s; }
+.team.a .track i { background: var(--team-a); }
+.team.b .track i { background: var(--team-b); }
+.banner { background: var(--team-a); color: var(--on-accent); border-radius: 12px; padding: 12px 14px; font-weight: 600; text-align: center; }
+.banner.b { background: var(--team-b); }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.label { font-size: 13px; color: var(--muted); font-weight: 500; letter-spacing: .02em; }
+.seg { display: flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--bg); }
+.seg button { flex: 1; border: 0; background: transparent; padding: 9px 4px; font-weight: 500; min-width: 0; }
+.seg button + button { border-inline-start: 1px solid var(--line); }
+.seg button[aria-pressed=true] { background: var(--fg); color: var(--bg); }
+.seg.a button[aria-pressed=true].t0, .seg button[aria-pressed=true].tA { background: var(--team-a); color: var(--on-accent); }
+.seg button[aria-pressed=true].tB { background: var(--team-b); color: var(--on-accent); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pair .field input { width: 100%; text-align: center; }
+.pair .field input[readonly] { color: var(--muted); background: transparent; }
+.hint { font-size: 12.5px; color: var(--muted); }
+
+.proj { display: grid; grid-template-columns: auto 1fr auto; gap: 10px 12px; align-items: center; }
+.proj .head { font-size: 13px; font-weight: 600; text-align: center; }
+.proj .head.a { color: var(--team-a); }
+.proj .head.b { color: var(--team-b); }
+.proj .name { font-weight: 500; text-align: center; }
+.step { display: inline-flex; align-items: center; gap: 4px; }
+.step button { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); font-size: 18px; line-height: 1; padding: 0; }
+.step b { min-width: 20px; text-align: center; font-variant-numeric: tabular-nums; }
+.step.a b { color: var(--team-a); }
+.step.b b { color: var(--team-b); }
+
+.preview { background: var(--bg); border: 1px dashed var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.preview .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.preview .res { font-family: var(--display); font-size: 28px; font-variant-numeric: tabular-nums; }
+.preview .a { color: var(--team-a); }
+.preview .b { color: var(--team-b); }
+.verdict { font-weight: 600; }
+.verdict.ok { color: var(--good); }
+.verdict.no { color: var(--bad); }
+.primary { background: var(--fg); color: var(--bg); border: 0; border-radius: 12px; padding: 13px; font-weight: 600; font-size: 16px; }
+.ghost { background: transparent; border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+.ghost.danger { color: var(--bad); border-color: var(--bad); }
+
+.hist { display: flex; flex-direction: column; }
+.hist .item { display: grid; grid-template-columns: 28px 1fr auto; gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); align-items: center; }
+.hist .item:first-child { border-top: 0; }
+.hist .n { color: var(--muted); font-variant-numeric: tabular-nums; }
+.hist .meta { font-size: 13px; color: var(--muted); }
+.hist .pts { font-family: var(--display); font-size: 20px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hist .pts .a { color: var(--team-a); } .hist .pts .b { color: var(--team-b); }
+.empty { color: var(--muted); padding: 6px 0; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.note { font-size: 12.5px; color: var(--muted); line-height: 1.7; }
+@media (prefers-reduced-motion: reduce) { .track i { transition: none; } }
+</style>
+
+<div class="wrap" dir="rtl" lang="ar">
+  <div class="top">
+    <h1>حاسبة البلوت</h1>
+    <label class="target">اللعب إلى <input type="number" id="target" min="10" max="999" inputmode="numeric" value="152"></label>
+  </div>
+
+  <section class="card" aria-label="نوع اللعب">
+    <div class="field">
+      <span class="label">نوع اللعب</span>
+      <div class="seg" id="modeSeg">
+        <button type="button" data-v="hukm" aria-pressed="true">حكم</button>
+        <button type="button" data-v="sun" aria-pressed="false">صن</button>
+      </div>
+    </div>
+  </section>
+
+  <div id="banner" hidden></div>
+
+  <section class="board" aria-label="النتيجة">
+    <div class="team a">
+      <input type="text" id="nameA" value="لنا" aria-label="اسم الفريق الأول" maxlength="14">
+      <div class="score" id="scoreA">0</div>
+      <div class="track"><i id="trackA"></i></div>
+    </div>
+    <div class="team b">
+      <input type="text" id="nameB" value="لهم" aria-label="اسم الفريق الثاني" maxlength="14">
+      <div class="score" id="scoreB">0</div>
+      <div class="track"><i id="trackB"></i></div>
+    </div>
+  </section>
+
+  <section class="card" aria-label="جولة جديدة">
+    <h2>جولة جديدة</h2>
+
+    <div class="field">
+      <span class="label">الدبل</span>
+      <div class="seg" id="multSeg">
+        <button type="button" data-v="1" aria-pressed="true">عادي</button>
+        <button type="button" data-v="2" aria-pressed="false">دبل</button>
+        <button type="button" data-v="3" aria-pressed="false">ثري</button>
+        <button type="button" data-v="4" aria-pressed="false">فور</button>
+        <button type="button" data-v="g" aria-pressed="false">قهوة</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="label">كبوت (فريق أخذ كل الأكلات)</span>
+      <div class="seg" id="kabSeg">
+        <button type="button" data-v="n" aria-pressed="true">لا</button>
+        <button type="button" data-v="0" class="tA" id="kabA" aria-pressed="false">لنا</button>
+        <button type="button" data-v="1" class="tB" id="kabB" aria-pressed="false">لهم</button>
+      </div>
+    </div>
+
+    <div class="field" id="cardsField">
+      <span class="label">نقاط الأكلات (المجموع <span id="cardsTotal">162</span> مع أكلة الأرض)</span>
+      <div class="pair">
+        <div class="field"><span class="hint" id="cardsLabelA">لنا</span><input type="number" id="cardsA" min="0" inputmode="numeric" placeholder="0"></div>
+        <div class="field"><span class="hint" id="cardsLabelB">لهم</span><input type="number" id="cardsB" min="0" inputmode="numeric" placeholder="0"></div>
+      </div>
+      <span class="hint">اكتب نقاط الخصم في خانة فريقه، والفريق الثاني يُحسب مشتريًا تلقائيًا.</span>
+    </div>
+
+    <div class="field">
+      <span class="label">المشاريع</span>
+      <div class="proj" id="proj"></div>
+    </div>
+
+    <div class="preview" id="preview" aria-live="polite"></div>
+    <button type="button" class="primary" id="save">سجّل الجولة</button>
+  </section>
+
+  <section class="card" aria-label="الجولات">
+    <div class="top"><h2>الجولات</h2><span class="hint" id="roundCount"></span></div>
+    <div class="hist" id="hist"></div>
+    <div class="actions">
+      <button type="button" class="ghost" id="undo">حذف آخر جولة</button>
+      <button type="button" class="ghost danger" id="reset">لعبة جديدة</button>
+    </div>
+  </section>
+
+  <p class="note">طريقة الحساب: الحكم مجموعه 16 والصن 26، وتُقرَّب نقاط الأكلات إلى أقرب عشرة (إلى أقرب خمسة في الصن). المشاريع بالحكم: سرا 2، خمسين 5، مية 10. وبالصن تتضاعف: 4 و10 و20، والأربعمية 40 (وبالحكم تُحسب مية). البلوت 2 ولا يتضاعف. الفريق اللي تكتب نقاطه هو الخصم، والثاني المشتري ويُحسب له الباقي. في الحكم إذا زاد مجموع الخصم على المشتري خسر المشتري وأخذ الخصم كل النقاط، وإذا تساويا (81 مقابل 81) فهو تعادل ولكل فريق نقاطه. في الصن لا يوجد تعادل: عند 65 مقابل 65 يأخذ المشتري 66 (14 نقطة) والخصم 64 (12). الكبوت 25 في الحكم و44 في الصن لمن أخذ كل الأكلات مع مشاريعه. الدبل والثري والفور تضاعف نقاط الفائز، والقهوة تعطيه اللعبة كاملة (في الصن عادي ودبل فقط). القواعد تختلف بين المناطق، فعدّل النقاط يدويًا إذا لزم.</p>
+</div>
+
+<script>
+(function () {
+  var KEY = "baloot-game-v1";
+  var state = { target: 152, names: ["لنا", "لهم"], rounds: [] };
+  var form = null;
+
+  function newForm() {
+    return {
+      mode: "hukm", mult: "1", kaboot: null, oppSide: null, opp: null,
+      proj: [{ sira: 0, fifty: 0, hundred: 0, four: 0, baloot: 0 }, { sira: 0, fifty: 0, hundred: 0, four: 0, baloot: 0 }]
+    };
+  }
+  form = newForm();
+
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var s = JSON.parse(raw);
+        if (s && Array.isArray(s.rounds)) { state = s; }
+      }
+    } catch (e) {}
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  var $ = function (id) { return document.getElementById(id); };
+  var PROJ = [
+    { k: "sira", n: "سرا", hukm: 2, sun: 4 },
+    { k: "fifty", n: "خمسين", hukm: 5, sun: 10 },
+    { k: "hundred", n: "مية", hukm: 10, sun: 20 },
+    { k: "four", n: "أربعمية", hukm: 10, sun: 40 },
+    { k: "baloot", n: "بلوت", hukm: 2, sun: 0 }
+  ];
+
+  function cardTotal() { return form.mode === "sun" ? 130 : 162; }
+  function unitsTotal() { return form.mode === "sun" ? 26 : 16; }
+
+  function compute(f) {
+    var sun = f.mode === "sun";
+    var total = sun ? 26 : 16;
+    var p = [0, 0], bal = [0, 0];
+    for (var t = 0; t < 2; t++) {
+      PROJ.forEach(function (d) {
+        var n = f.proj[t][d.k] || 0;
+        var u = (sun ? d.sun : d.hukm) * n;
+        if (d.k === "baloot") bal[t] += u; else p[t] += u;
+      });
+    }
+    var m = f.mult === "g" ? 1 : Number(f.mult);
+    if (f.kaboot != null) {
+      var kw = f.kaboot, kr = [0, 0];
+      kr[kw] = f.mult === "g" ? state.target : ((sun ? 44 : 25) + p[kw]) * m;
+      kr[0] += bal[0]; kr[1] += bal[1];
+      return { res: kr, win: null, buyer: null, tie: false, kaboot: kw };
+    }
+    var cards = [0, 0];
+    var opp = f.oppSide, buyer = opp == null ? null : 1 - opp;
+    if (f.opp != null && opp != null) {
+      if (sun) {
+        /* صن: النقاط = تقريب (الأبناط ÷ 10) × 2، والخامسة تُقرَّب لصالح الأكبر، وعند 65 مقابل 65 للمشتري */
+        var fo2 = Math.max(0, Math.min(130, f.opp)), bo2 = 130 - fo2, oppLarger = fo2 > bo2;
+        var rnd = function (x, up) { var r = x % 10, b = Math.floor(x / 10); return r > 5 ? b + 1 : r < 5 ? b : (up ? b + 1 : b); };
+        cards[opp] = 2 * rnd(fo2, oppLarger);
+        cards[buyer] = 2 * rnd(bo2, !oppLarger);
+      } else {
+        var oppU = Math.max(0, Math.min(total, Math.round(f.opp / 10)));
+        cards[opp] = oppU;
+        cards[buyer] = total - oppU;
+      }
+    }
+    var tot = [cards[0] + p[0], cards[1] + p[1]];
+    if (buyer == null || f.opp == null) { return { res: [tot[0] + bal[0], tot[1] + bal[1]], win: null, buyer: null, tie: false, kaboot: null }; }
+    /* النجاح والخسارة بالأبناط الخام (الأكلات + المشاريع) دون تقريب */
+    var base = sun ? 130 : 162, mul = sun ? 5 : 10;
+    var raw = [0, 0], fo = Math.max(0, Math.min(base, f.opp));
+    raw[opp] = fo; raw[buyer] = base - fo;
+    for (var q = 0; q < 2; q++) PROJ.forEach(function (d) { raw[q] += (f.proj[q][d.k] || 0) * (sun ? d.sun : d.hukm) * mul; });
+    var tie = !sun && raw[buyer] === raw[opp];
+    var win = sun ? raw[buyer] >= raw[opp] : raw[buyer] > raw[opp];
+    if (tie) {
+      /* الحكم: التعادل لا يخسّر المشتري، ولكل فريق نقاطه */
+      return { res: [tot[0] + bal[0], tot[1] + bal[1]], win: null, buyer: buyer, tie: true, kaboot: null };
+    }
+    var winner = win ? buyer : opp;
+    var res = [0, 0];
+    if (f.mult === "g") { res[winner] = state.target; }
+    else {
+      if (m === 1 && win) { res = [tot[0], tot[1]]; }
+      else { res[winner] = (tot[0] + tot[1]) * m; }
+      res[0] += bal[0]; res[1] += bal[1];
+    }
+    return { res: res, win: win, buyer: buyer, tie: false, kaboot: null };
+  }
+
+  function scores() {
+    var s = [0, 0];
+    state.rounds.forEach(function (r) { s[0] += r.res[0]; s[1] += r.res[1]; });
+    return s;
+  }
+
+  function setSeg(el, value) {
+    Array.prototype.forEach.call(el.children, function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === String(value)));
+    });
+  }
+
+  function buildSegs() {
+    var a = state.names[0] || "لنا", b = state.names[1] || "لهم";
+  }
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  function renderProj() {
+    var sun = form.mode === "sun";
+    function stepper(t, d) {
+      return '<span class="step ' + (t === 0 ? "a" : "b") + '"><button type="button" data-t="' + t + '" data-k="' + d.k + '" data-d="-1" aria-label="إنقاص ' + d.n + '">−</button><b>' +
+        (form.proj[t][d.k] || 0) + '</b><button type="button" data-t="' + t + '" data-k="' + d.k + '" data-d="1" aria-label="زيادة ' + d.n + '">+</button></span>';
+    }
+    var html = '<span class="head a">' + esc(state.names[0]) + '</span><span></span><span class="head b">' + esc(state.names[1]) + '</span>';
+    PROJ.forEach(function (d) {
+      var allowed = sun ? d.sun > 0 : d.hukm > 0;
+      if (!allowed) return;
+      html += stepper(0, d) + '<span class="name">' + d.n + '</span>' + stepper(1, d);
+    });
+    $("proj").innerHTML = html;
+  }
+
+  function renderForm() {
+    setSeg($("modeSeg"), form.mode);
+    if (form.mode === "sun" && form.mult !== "1" && form.mult !== "2") form.mult = "1";
+    Array.prototype.forEach.call($("multSeg").children, function (btn) {
+      var v = btn.getAttribute("data-v");
+      btn.hidden = form.mode === "sun" && v !== "1" && v !== "2";
+    });
+    setSeg($("multSeg"), form.mult);
+    setSeg($("kabSeg"), form.kaboot == null ? "n" : form.kaboot);
+    $("kabA").textContent = state.names[0]; $("kabB").textContent = state.names[1];
+    $("cardsField").hidden = form.kaboot != null;
+    updateCardLabels();
+    $("cardsTotal").textContent = cardTotal();
+    renderProj();
+    renderPreview();
+  }
+
+  function renderPreview() {
+    var r = compute(form);
+    var tag = function (i) { return r.buyer == null ? "" : r.buyer === i ? " (مشتري)" : " (خصم)"; };
+    var verdict = r.kaboot != null ? '<div class="verdict ok">كبوت ' + esc(state.names[r.kaboot]) + '</div>' : r.tie ? '<div class="verdict">تعادل</div>' : r.win == null ? "" : '<div class="verdict ' + (r.win ? "ok" : "no") + '">' + (r.win ? "نجح المشتري" : "خسر المشتري") + '</div>';
+    $("preview").innerHTML = verdict +
+      '<div class="row"><span>' + esc(state.names[0]) + tag(0) + '</span><span class="res a">' + r.res[0] + '</span></div>' +
+      '<div class="row"><span>' + esc(state.names[1]) + tag(1) + '</span><span class="res b">' + r.res[1] + '</span></div>';
+  }
+
+  function renderBoard() {
+    var s = scores();
+    $("scoreA").textContent = s[0];
+    $("scoreB").textContent = s[1];
+    $("trackA").style.width = Math.min(100, s[0] / state.target * 100) + "%";
+    $("trackB").style.width = Math.min(100, s[1] / state.target * 100) + "%";
+    var b = $("banner");
+    if ((s[0] >= state.target || s[1] >= state.target) && state.rounds.length) {
+      var w = s[0] >= s[1] ? 0 : 1;
+      b.hidden = false;
+      b.className = "banner" + (w === 1 ? " b" : "");
+      b.textContent = "فاز " + state.names[w] + " باللعبة " + s[w] + " مقابل " + s[1 - w];
+    } else { b.hidden = true; }
+  }
+
+  function renderHist() {
+    var h = $("hist");
+    $("roundCount").textContent = state.rounds.length ? state.rounds.length + " جولة" : "";
+    if (!state.rounds.length) { h.innerHTML = '<div class="empty">لا توجد جولات بعد. سجّل أول جولة من النموذج أعلاه.</div>'; return; }
+    var html = "";
+    for (var i = state.rounds.length - 1; i >= 0; i--) {
+      var r = state.rounds[i];
+      var meta = (r.mode === "sun" ? "صن" : "حكم") + (r.kaboot != null ? " · كبوت " + esc(state.names[r.kaboot]) : r.buyer != null ? " · المشتري " + esc(state.names[r.buyer]) + (r.tie ? " تعادل" : r.win ? " نجح" : " خسر") : "") +
+        (r.mult === "g" ? " · قهوة" : r.mult && r.mult !== "1" ? " · ×" + r.mult : "");
+      html += '<div class="item"><span class="n">' + (i + 1) + '</span><span class="meta">' + meta + '</span><span class="pts"><span class="a">' + r.res[0] + '</span> – <span class="b">' + r.res[1] + '</span></span></div>';
+    }
+    h.innerHTML = html;
+  }
+
+  function renderAll() { buildSegs(); renderForm(); renderBoard(); renderHist(); }
+
+  /* events */
+  $("modeSeg").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    form.mode = b.getAttribute("data-v");
+    if (form.mode === "sun") { form.proj.forEach(function (p) { p.baloot = 0; }); }
+    form.opp = null; form.oppSide = null; $("cardsA").value = ""; $("cardsB").value = "";
+    renderForm();
+  });
+
+  function numOrNull(v) { if (v === "" || v == null) return null; var n = Number(v); return isFinite(n) ? Math.max(0, n) : null; }
+  function updateCardLabels() {
+    var s = form.oppSide;
+    $("cardsLabelA").textContent = state.names[0] + (s == null ? "" : s === 0 ? " · خصم" : " · مشتري");
+    $("cardsLabelB").textContent = state.names[1] + (s == null ? "" : s === 1 ? " · خصم" : " · مشتري");
+  }
+  function onCards(side) {
+    var v = numOrNull($(side === 0 ? "cardsA" : "cardsB").value);
+    var other = $(side === 0 ? "cardsB" : "cardsA");
+    if (v == null) { form.opp = null; form.oppSide = null; other.value = ""; }
+    else { form.opp = v; form.oppSide = side; other.value = Math.max(0, cardTotal() - v); }
+    updateCardLabels();
+    renderPreview();
+  }
+  $("cardsA").addEventListener("input", function () { onCards(0); });
+  $("cardsB").addEventListener("input", function () { onCards(1); });
+  $("multSeg").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    form.mult = b.getAttribute("data-v");
+    renderForm();
+  });
+  $("kabSeg").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var v = b.getAttribute("data-v");
+    form.kaboot = v === "n" ? null : Number(v);
+    renderForm();
+  });
+  $("proj").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var t = Number(b.getAttribute("data-t")), k = b.getAttribute("data-k"), d = Number(b.getAttribute("data-d"));
+    form.proj[t][k] = Math.max(0, Math.min(9, (form.proj[t][k] || 0) + d));
+    renderProj(); renderPreview();
+  });
+
+  $("save").addEventListener("click", function () {
+    var r = compute(form);
+    state.rounds.push({ mode: form.mode, buyer: r.buyer, mult: form.mult, win: r.win, tie: r.tie, kaboot: r.kaboot, res: r.res });
+    save();
+    var keepMode = form.mode;
+    form = newForm(); form.mode = keepMode;
+    $("cardsA").value = ""; $("cardsB").value = "";
+    renderAll();
+  });
+  $("undo").addEventListener("click", function () { state.rounds.pop(); save(); renderBoard(); renderHist(); });
+
+  var resetArmed = false, resetTimer = null;
+  $("reset").addEventListener("click", function () {
+    var btn = this;
+    if (!resetArmed) {
+      resetArmed = true; btn.textContent = "اضغط مرة ثانية للتأكيد";
+      resetTimer = setTimeout(function () { resetArmed = false; btn.textContent = "لعبة جديدة"; }, 3500);
+      return;
+    }
+    clearTimeout(resetTimer); resetArmed = false; btn.textContent = "لعبة جديدة";
+    state.rounds = []; save(); form = newForm(); $("cardsA").value = ""; $("cardsB").value = ""; renderAll();
+  });
+
+  $("target").addEventListener("change", function () {
+    var v = Number(this.value); if (!isFinite(v) || v < 10) v = 152;
+    state.target = v; this.value = v; save(); renderBoard(); renderPreview();
+  });
+  ["nameA", "nameB"].forEach(function (id, i) {
+    $(id).addEventListener("input", function () {
+      state.names[i] = this.value.trim() || (i === 0 ? "لنا" : "لهم");
+      save(); buildSegs(); renderForm(); renderBoard(); renderHist();
+    });
+  });
+
+  load();
+  $("target").value = state.target;
+  $("nameA").value = state.names[0];
+  $("nameB").value = state.names[1];
+  renderAll();
+})();
+</script>
+
+<script>if ("serviceWorker" in navigator && location.protocol !== "file:") { window.addEventListener("load", function(){ navigator.serviceWorker.register("./sw.js").catch(function(e){console.warn("SW registration failed",e);}); }); }</script>
+</body></html>
