@@ -1,6 +1,70 @@
-<!doctype html><html><head><meta charset=utf8><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e6b55"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="حاسبة البلوت"><link rel="manifest" href="./manifest.webmanifest"><link rel="apple-touch-icon" href="./icons/icon-192.png"><title>حاسبة البلوت</title><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;700&display=swap">
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#080d12" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><meta content="حاسبة البلوت" name="apple-mobile-web-app-title"/><link href="./manifest.webmanifest" rel="manifest"/><link href="./icons/icon-192.png" rel="apple-touch-icon"/><title>حاسبة البلوت</title><style id="kaboot-inline-design">
+.proj .kab-project{min-height:40px;border:1px solid #b9914b;border-radius:11px;background:#18201e;color:#f6d990;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;transition:background .2s,box-shadow .2s}
+.proj .kab-project.kab-a[aria-pressed="true"]{background:#42f5b5;color:#09251d;box-shadow:0 0 14px #42f5b555}
+.proj .kab-project.kab-b[aria-pressed="true"]{background:#75caff;color:#0a1d30;box-shadow:0 0 14px #75caff55}
+.proj .kab-caption{font-size:12px;color:#c7a96f}
+#save{min-height:50px}
+.save-mult-row{display:flex;align-items:end;gap:10px;direction:rtl}
+.save-mult-row #save{flex:1;min-width:0;min-height:52px}
+.mult-picker{width:100px;flex:0 0 100px;display:flex;flex-direction:column;gap:4px}
+.mult-picker .label{font-weight:800;color:#f3d38b}
+.mult-picker select{width:100%;height:52px;min-height:52px;padding:8px 10px;border:1.5px solid #c9a15a;border-radius:12px;background:#151b1b;color:#f5d68f;font:800 17px "IBM Plex Sans Arabic",Tahoma,sans-serif;text-align:center;cursor:pointer;outline-offset:3px}
+.mult-picker select option{background:#151b1b;color:#f5d68f}
+
+</style>
+<style id="compact-mode-points-style">
+/* Compact mode switch integrated into the points entry area. */
+.card[aria-label="جولة جديدة"]{gap:11px}
+.card[aria-label="جولة جديدة"] > h2{margin-bottom:0}
+.compact-game-inputs{margin:0;gap:0}
+.compact-mode-line{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:42px}
+.compact-mode-line>.label{white-space:nowrap;font-size:13px}
+.compact-mode-line .seg{width:min(250px,68%);flex:0 1 250px;padding:2px;border-radius:10px}
+.compact-mode-line .seg button{min-height:35px;padding:5px 10px;border-radius:7px}
+#cardsField{gap:6px}
+#cardsField>.label{font-size:13px}
+#cardsField .pair{gap:10px}
+#cardsField .pair .field{gap:3px}
+#cardsField .pair input{min-height:39px;padding:6px 8px}
+#cardsField>.hint{font-size:11.5px;line-height:1.5}
+@media(max-width:380px){.compact-mode-line .seg{width:66%}.compact-mode-line>.label{font-size:12px}}
+</style>
+<style id="extra-compact-game-style">
+/* Compact the round controls without touching scoring logic. */
+.card[aria-label="جولة جديدة"]{padding:12px 14px!important;gap:8px!important}
+.card[aria-label="جولة جديدة"]>.field{gap:3px!important}
+.compact-mode-line{min-height:34px!important;gap:8px!important}
+.compact-mode-line .seg{padding:2px!important}
+.compact-mode-line .seg button{min-height:30px!important;padding:3px 8px!important}
+#cardsField{gap:3px!important}
+#cardsField .pair{gap:8px!important}
+#cardsField .pair .field{gap:2px!important}
+#cardsField .pair input{min-height:36px!important;padding:5px 8px!important}
+#cardsField>.hint{font-size:11px!important;line-height:1.35!important}
+</style><style>
+/* Single compact gold-framed game panel: scores + round entry. */
+#mainView{gap:10px}
+.card[aria-label="جولة جديدة"]{padding:13px 14px!important;gap:10px!important}
+.card[aria-label="جولة جديدة"] .inline-scoreboard{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0;padding:9px 0 10px;border-top:1px solid #66502d;border-bottom:1px solid #66502d}
+.card[aria-label="جولة جديدة"] .inline-scoreboard .team{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;min-height:0!important;padding:2px 8px!important;gap:3px!important;align-items:center;justify-content:center}
+.card[aria-label="جولة جديدة"] .inline-scoreboard .team:before{display:none!important}
+.card[aria-label="جولة جديدة"] .inline-scoreboard .team.a{border-inline-end:1px solid #55452d!important}
+.card[aria-label="جولة جديدة"] .inline-scoreboard .team input[type=text]{font-size:13px!important;line-height:1.3!important;padding:1px 3px!important;width:100%;height:26px!important;color:#f5d48b!important;-webkit-text-fill-color:#f5d48b!important}
+.card[aria-label="جولة جديدة"] .inline-scoreboard .score{font-size:38px!important;line-height:1.12!important;margin:0!important;text-shadow:none!important}
+.card[aria-label="جولة جديدة"] .inline-scoreboard .track{height:3px!important;width:100%;margin-top:4px!important}
+@media(max-width:380px){.card[aria-label="جولة جديدة"] .inline-scoreboard .score{font-size:33px!important}.card[aria-label="جولة جديدة"] .inline-scoreboard .team{padding:2px 4px!important}}
+</style><style>
+/* Type of play directly above points entry, aligned to the same content width. */
+.compact-game-inputs{margin:0!important;padding:0!important;}
+.compact-mode-line{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:5px!important;}
+.compact-mode-line>.label{text-align:right!important;}
+.compact-mode-line .seg{width:100%!important;flex:auto!important;max-width:none!important;}
+.compact-mode-line .seg button{min-height:38px!important;}
+</style>
+</head><body>
+<meta content="cover" name="claude:viewport-fit-sides"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&amp;family=Reem+Kufi:wght@500;700&amp;display=swap" rel="stylesheet"/>
 <style>
 /* Layout: one narrow column, a two-team scoreboard on top, the round form below, history last. */
 :root {
@@ -113,92 +177,261 @@ input[type=number], input[type=text] {
 .actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .note { font-size: 12.5px; color: var(--muted); line-height: 1.7; }
 @media (prefers-reduced-motion: reduce) { .track i { transition: none; } }
+
+/* Gold edition: legible warm-gold typography and matching outlines */
+:root,:root[data-theme="dark"],:root[data-theme="light"]{--fg:#f5dfaa;--muted:#c5ae82;--line:#80643b;--team-a:#f4ca69;--team-b:#e3a84f;--on-accent:#1b1306;--good:#f4ca69}
+html{background:#0b0d11}
+body{background:radial-gradient(ellipse at 50% -10%,#48351b 0%,transparent 49%),#0b0d11;color:#f5dfaa}
+h1,h2,.label,.proj .name,.preview,.verdict,.hist,.card,.team{color:#f6dda2}
+h1{color:#ffdf8c;text-shadow:0 0 20px #e3a84f40}
+.card,.team{background:linear-gradient(145deg,#202027,#111419);border:1px solid #846537;box-shadow:0 12px 30px #0006,inset 0 1px #ffdb8a15}
+.target,.note{background:#17171c;border:1px solid #80643b;color:#d6bb84}
+.target input{color:#ffda81}
+input[type=number],input[type=text]{background:#11141a;border:1px solid #866b40;color:#f9e6b9;-webkit-text-fill-color:#f9e6b9}
+input::placeholder{color:#b5a17d;opacity:1}
+.team input[type=text]{color:#f9e6b9;-webkit-text-fill-color:#f9e6b9}
+.team.a .score{color:#ffdc83;text-shadow:0 0 22px #f0b94d55}
+.team.b .score{color:#e7b361;text-shadow:0 0 22px #df9e3e55}
+.team:before{background:#f4ca69;box-shadow:0 0 16px #f4ca69}
+.team.b:before{background:#e3a84f;box-shadow:0 0 16px #e3a84f}
+.track{background:#393025}.team.a .track i{background:#f4ca69}.team.b .track i{background:#e3a84f}
+.seg{background:#101419;border:1px solid #80643b}
+button,.seg button{color:#f5dfaa}
+.seg button[aria-pressed=true],.seg.a button[aria-pressed=true].t0,.seg button[aria-pressed=true].tA{background:linear-gradient(120deg,#ffe19a,#dca845);color:#241805;box-shadow:0 4px 18px #dca84544}
+.seg button[aria-pressed=true].tB{background:linear-gradient(120deg,#f2c67a,#b98231);color:#241805}
+.step button,.ghost{background:#1d1b1a;border:1px solid #8c6b3c;color:#f6d994}
+.step.a b,.preview .a,.hist .pts .a,.proj .head.a{color:#ffdc83}
+.step.b b,.preview .b,.hist .pts .b,.proj .head.b{color:#e7b361}
+.preview{background:linear-gradient(135deg,#292115,#15171b);border:1px solid #a27b3f}
+.primary{background:linear-gradient(110deg,#ffe29a,#d6a13e);color:#241805;box-shadow:0 7px 23px #d9a34033}
+.ghost.danger{color:#ffb6ad;border-color:#a45c55}
+.hist .item{border-color:#5b482f}
+.target,.hint,.hist .meta,.hist .n,.empty,.note{color:#d1b887}
+.label{color:#f0d39a}
+.banner{background:#b78836;color:#171008}.banner.b{background:#91672b;color:#fff0ce}
+button:focus-visible,input:focus-visible{outline:2px solid #ffe29a;outline-offset:2px}
+
 </style>
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}
+/* Neon dark visual redesign — original calculator logic preserved */
+:root,:root[data-theme="dark"],:root[data-theme="light"]{
+--bg:#080d12;--surface:#142029;--fg:#effff9;--muted:#9cb8b1;--line:#2c4846;
+--team-a:#42f5b5;--team-b:#75caff;--on-accent:#061b14;--good:#42f5b5;--bad:#ff8997;color-scheme:dark}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+--bg:#080d12;--surface:#142029;--fg:#effff9;--muted:#9cb8b1;--line:#2c4846;
+--team-a:#42f5b5;--team-b:#75caff;--on-accent:#061b14;--good:#42f5b5;--bad:#ff8997}}
+html{background:#080d12;color-scheme:dark}
+body{background:radial-gradient(ellipse at 50% -12%,#174b3d 0%,transparent 45%),#080d12;min-height:100vh;padding-block:26px 60px}
+.wrap{max-width:560px;gap:18px}
+h1{font-size:30px;color:#f2fff9;text-shadow:0 0 24px #42f5b533}
+h2{font-size:20px}
+.wrap>.top:first-child{padding:8px 2px}
+.target{background:#142029;border:1px solid #31534c;border-radius:13px;padding:7px 10px}
+.target input{width:62px;color:#42f5b5;font-weight:700}
+.card,.team{background:linear-gradient(145deg,#1b2c34,#101920);border:1px solid #2b4947;border-radius:20px;box-shadow:0 12px 30px #0005,inset 0 1px #ffffff08}
+.card{padding:19px;gap:17px}
+.team{padding:18px 12px;gap:13px;position:relative;overflow:hidden}
+.team:before{content:"";position:absolute;top:0;right:0;left:0;height:3px;background:var(--team-a);box-shadow:0 0 18px var(--team-a)}
+.team.b:before{background:var(--team-b);box-shadow:0 0 18px var(--team-b)}
+.team input[type=text]{color:#f2fff9;font-size:17px}
+.score{font-size:clamp(54px,14vw,78px);font-weight:700;text-shadow:0 0 20px #42f5b533}
+.team.b .score{text-shadow:0 0 20px #75caff33}
+.track{height:7px;border-radius:8px;background:#253a3e}
+.track i{border-radius:8px}
+input[type=number],input[type=text]{background:#0b171e;border:1px solid #34534f;border-radius:12px;color:#f2fff9;min-height:43px}
+.label{color:#bed7ce;font-size:14px;font-weight:600}
+.seg{background:#0b171e;border:1px solid #304f4a;border-radius:13px;padding:4px;gap:4px}
+.seg button{border-radius:9px;padding:11px 4px;min-height:44px;font-weight:600}
+.seg button+button{border-inline-start:0}
+.seg button[aria-pressed=true],.seg.a button[aria-pressed=true].t0,.seg button[aria-pressed=true].tA{background:#42f5b5;color:#071a13;box-shadow:0 4px 18px #42f5b522}
+.seg button[aria-pressed=true].tB{background:#75caff;color:#071824}
+.proj{gap:13px 9px;padding:7px 0}
+.proj .name{color:#e0f1ea}
+.step{gap:6px}
+.step button{width:36px;height:36px;border-radius:10px;background:#10262b;border-color:#345c54;color:#f1fff9}
+.step b{font-size:16px}
+.preview{background:linear-gradient(135deg,#0b2827,#0c1c27);border:1px solid #326b5c;border-radius:16px;padding:15px;gap:10px}
+.preview .res{font-size:32px}
+.primary{background:linear-gradient(110deg,#42f5b5,#17bd91);color:#061a13;border-radius:14px;padding:15px;min-height:52px;box-shadow:0 7px 23px #2fe7aa33;font-size:17px}
+.ghost{background:#11262c;border-color:#34534f;border-radius:12px;min-height:44px}
+.ghost.danger{background:#ff899711;border-color:#7e4150}
+.hist .item{border-color:#2b4444;padding:13px 0}
+.hist .pts{font-size:22px}
+.note{background:#122129aa;border:1px solid #2b4342;border-radius:14px;padding:15px}
+@media(max-width:380px){body{padding-left:11px;padding-right:11px}.card{padding:14px}.team{padding:14px 8px}.seg button{font-size:12px;padding-inline:2px}.step{gap:3px}.step button{width:31px;height:34px}}
+/* Contrast repair: reset stylesheet had forced black text on the dark background. */
+body{color:#f2fff9}
+button{color:#f2fff9}
+.seg button{color:#e8f8f3}
+.seg button[aria-pressed="true"],.seg.a button[aria-pressed="true"].t0,.seg button[aria-pressed="true"].tA{color:#071a13}
+.seg button[aria-pressed="true"].tB{color:#071824}
+.primary{color:#061a13}
+input[type="number"],input[type="text"]{color:#f2fff9;-webkit-text-fill-color:#f2fff9}
+input::placeholder{color:#8fa9a2;opacity:1}
+.target,.hint,.hist .meta,.hist .n,.empty,.note{color:#b6ccc6}
+.label{color:#d6e9e3}
+.preview,.proj .name,.verdict,.hist,.card,.team{color:#f2fff9}
 
+</style>
+<style id="gold-text-final">
+/* Gold typography and borders, original green/blue scoring preserved. */
+:root{--team-a:#42f5b5;--team-b:#75caff;--fg:#f5dfaa;--muted:#d3bc8c;--line:#8d7043;--on-accent:#061b14}
+body{color:#f5dfaa;background:radial-gradient(ellipse at 50% -12%,#3b2c1b 0%,transparent 48%),#080d12}
+h1,h2,.label,.proj .name,.hint,.target,.note,.hist .meta,.hist .n,.empty,.verdict,.preview,.card,.team{color:#f3d493;font-weight:700}
+h1{color:#ffdf90;text-shadow:0 0 18px #d5a44b55}
+.card,.team{border:1px solid #9b793e;background:linear-gradient(145deg,#232326,#11161b)}
+.target,.seg,.preview{border-color:#947442}
+.target input,input[type=number],input[type=text],.team input[type=text]{color:#f9df9f!important;-webkit-text-fill-color:#f9df9f;font-weight:700}
+button,.seg button,.ghost,.step button{font-weight:700;color:#f5d58e}
+.seg button[aria-pressed=true]{color:#071a13}
+.team.a .score,.preview .a,.hist .pts .a,.proj .head.a,.step.a b{color:#42f5b5!important;-webkit-text-fill-color:#42f5b5}
+.team.b .score,.preview .b,.hist .pts .b,.proj .head.b,.step.b b{color:#75caff!important;-webkit-text-fill-color:#75caff}
+.team.a .track i{background:#42f5b5!important}.team.b .track i{background:#75caff!important}
+.team.a:before{background:#42f5b5!important;box-shadow:0 0 18px #42f5b5}
+.team.b:before{background:#75caff!important;box-shadow:0 0 18px #75caff}
+.seg button[aria-pressed=true],.seg button[aria-pressed=true].tA{background:#42f5b5;color:#071a13}
+.seg button[aria-pressed=true].tB{background:#75caff;color:#071824}
+.primary{background:linear-gradient(120deg,#ffe5a5,#d8a747);color:#201606;font-weight:800}
+.ghost,.step button{border-color:#947442}
+</style>
+<style>
+/* Game end panels and navigation */
+.banner,.banner.b{background:linear-gradient(145deg,#24201b,#0b1117);border:1px solid #c99b46;border-radius:20px;padding:22px 12px;color:#f6d78f;box-shadow:0 12px 35px #0008;display:flex;flex-direction:column;align-items:center;gap:8px}
+.banner[hidden],.result-section[hidden]{display:none!important}
+.result-section{margin:2px 0 4px;animation:resultEnter .45s ease-out}
+@keyframes resultEnter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.win-title{font-family:"Reem Kufi",Tahoma,sans-serif;font-size:clamp(23px,6vw,34px);font-weight:900;color:#ffdf92;text-shadow:0 2px 16px #e5b95355}
+.win-sub{font-size:19px;font-weight:800;color:#f7cf78}
+.win-crowns{font-size:31px;letter-spacing:8px;color:#ffda78}
+.win-foot{font-size:12px;color:#c8ac77}
+.bottom-nav{position:sticky;bottom:0;z-index:20;display:flex;gap:8px;padding:9px;background:#0a1018f5;border:1px solid #9b793e;border-radius:16px;box-shadow:0 -8px 24px #0009;backdrop-filter:blur(10px)}
+.bottom-nav button{flex:1;min-width:0;padding:9px 5px;background:#182027;border:1px solid #6d5835;border-radius:10px;color:#f3d493;font-weight:800;font-size:13px}
+.bottom-nav button[aria-current="page"]{background:#c99b46;color:#17110a}
+.view-panel[hidden]{display:none!important}
+.archive-item{border:1px solid #7b6035;border-radius:12px;padding:12px;margin:8px 0;background:#151b20}
+.archive-item .ghost{margin-top:8px}
+.celebration{position:fixed;inset:0;pointer-events:none;z-index:100;overflow:hidden}
+.confetti{position:absolute;top:-10%;width:9px;height:16px;border-radius:2px;animation:fall 3.8s linear forwards;box-shadow:0 0 8px #e7c36e88}
+@keyframes fall{to{transform:translate3d(var(--drift),115vh,0) rotate(740deg);opacity:0}}
+@media(prefers-reduced-motion:reduce){.confetti{animation:none;display:none}}
+</style>
+<style id="integrated-round-result">
+/* Compact round result: integrated in the same gold card as mode and card inputs. */
+.card[aria-label="جولة جديدة"]{padding:12px 14px!important;gap:10px!important}
+.card[aria-label="جولة جديدة"] .compact-game-inputs{margin:0!important}
+.card[aria-label="جولة جديدة"] #cardsField{gap:5px!important}
+.card[aria-label="جولة جديدة"] #cardsField .pair{gap:8px!important}
+.card[aria-label="جولة جديدة"] #cardsField .pair .field{gap:2px!important}
+.card[aria-label="جولة جديدة"] #cardsField input{min-height:37px!important;padding:5px 8px!important}
+.card[aria-label="جولة جديدة"] #cardsField>.hint{font-size:11px;line-height:1.5;margin:1px 0}
+.card[aria-label="جولة جديدة"] .compact-round-result{background:linear-gradient(110deg,#191b1d,#111a1d)!important;border:1px solid #765c34!important;border-radius:11px!important;padding:7px 11px!important;gap:2px!important;margin-top:4px;box-shadow:none!important}
+.card[aria-label="جولة جديدة"] .compact-round-result .row{display:flex;align-items:center;gap:8px;min-height:26px}
+.card[aria-label="جولة جديدة"] .compact-round-result .row span:first-child{font-size:12px;font-weight:700}
+.card[aria-label="جولة جديدة"] .compact-round-result .res{font-size:23px!important;line-height:1.15}
+.card[aria-label="جولة جديدة"] .compact-round-result .verdict{font-size:12px;line-height:1.5;text-align:center}
+@media(max-width:380px){.card[aria-label="جولة جديدة"]{padding:10px 11px!important}}
+
+
+/* Simple numeric breakdown */
+.numeric-compare{text-align:center;padding:9px 4px;color:#f3d48b;font-size:14px;font-weight:800;border-top:1px solid #4b402e}
+.numeric-details{display:grid;gap:0;margin-top:8px;font-variant-numeric:tabular-nums}
+.numeric-head,.numeric-line{display:grid;grid-template-columns:1.15fr 1fr 1fr;align-items:center;text-align:center;padding:8px 4px;gap:5px}
+.numeric-line{border-top:1px solid #4b402e}
+.numeric-line>span{text-align:right;color:#e5d5b4;font-weight:700}
+.numeric-line strong,.numeric-head b{font-size:17px}
+.numeric-total{border-top:1px solid #b28c4c;background:#241e16;border-radius:6px}
+
+.numeric-line strong{position:relative;display:block;text-align:center}
+.project-quantity{position:absolute;right:2px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:600;color:#d7bd88;direction:ltr;white-space:nowrap;line-height:1;display:inline-block}
+/* Details per round and standalone game-over screen */
+.round-entry{border-top:1px solid #57472c;padding-bottom:8px}.round-entry .item{border:0!important}
+.round-details{background:#141a20;border:1px solid #69512d;border-radius:10px;padding:8px 11px;font-size:13px;color:#efd9a7}
+.round-details summary{cursor:pointer;color:#f5d181;font-weight:800;list-style:none}
+.round-details summary:before{content:'＋ ';color:#42f5b5}
+.round-details[open] summary:before{content:'− '}
+.round-details p{margin:9px 0;line-height:1.85}.round-details .a{color:#42f5b5}.round-details .b{color:#75caff}
+.detail-final{border-top:1px solid #6b5331;padding-top:8px}
+.victory-page[hidden]{display:none!important}
+body.on-victory .wrap>.view-panel,body.on-victory .wrap>.bottom-nav{display:none!important}
+body.on-victory .victory-page{display:flex!important}
+.victory-page{min-height:85dvh;flex-direction:column;justify-content:center;gap:20px;align-items:stretch;text-align:center;padding:18px 0}
+.victory-brand{font-family:'Reem Kufi',sans-serif;color:#d9b974;font-weight:800;letter-spacing:1px}
+.victory-box{border:1px solid #c99b46;border-radius:24px;padding:38px 15px;background:radial-gradient(circle at 50% 0%,#49361e,#11161b 70%);box-shadow:0 16px 48px #0008}
+.victory-box .win-title{font-size:clamp(30px,8vw,46px)}.victory-box .win-crowns{font-size:42px;margin-bottom:14px}
+.victory-scores{display:flex;align-items:center;justify-content:space-evenly;gap:12px;border:1px solid #8c703d;border-radius:18px;padding:18px;background:#151a20}
+.victory-scores div{display:flex;flex-direction:column;gap:6px;font-weight:800}.victory-scores strong{font-size:42px;font-family:'Reem Kufi',sans-serif}.victory-scores .a{color:#42f5b5}.victory-scores .b{color:#75caff}.victory-scores .vs{color:#d9b974}
+</style>
 <div class="wrap" dir="rtl" lang="ar">
-  <div class="top">
-    <h1>حاسبة البلوت</h1>
-    <label class="target">اللعب إلى <input type="number" id="target" min="10" max="999" inputmode="numeric" value="152"></label>
-  </div>
-
-  <section class="card" aria-label="نوع اللعب">
-    <div class="field">
-      <span class="label">نوع اللعب</span>
-      <div class="seg" id="modeSeg">
-        <button type="button" data-v="hukm" aria-pressed="true">حكم</button>
-        <button type="button" data-v="sun" aria-pressed="false">صن</button>
-      </div>
-    </div>
-  </section>
-
-  <div id="banner" hidden></div>
-
-  <section class="board" aria-label="النتيجة">
-    <div class="team a">
-      <input type="text" id="nameA" value="لنا" aria-label="اسم الفريق الأول" maxlength="14">
-      <div class="score" id="scoreA">0</div>
-      <div class="track"><i id="trackA"></i></div>
-    </div>
-    <div class="team b">
-      <input type="text" id="nameB" value="لهم" aria-label="اسم الفريق الثاني" maxlength="14">
-      <div class="score" id="scoreB">0</div>
-      <div class="track"><i id="trackB"></i></div>
-    </div>
-  </section>
-
-  <section class="card" aria-label="جولة جديدة">
-    <h2>جولة جديدة</h2>
-
-    <div class="field">
-      <span class="label">الدبل</span>
-      <div class="seg" id="multSeg">
-        <button type="button" data-v="1" aria-pressed="true">عادي</button>
-        <button type="button" data-v="2" aria-pressed="false">دبل</button>
-        <button type="button" data-v="3" aria-pressed="false">ثري</button>
-        <button type="button" data-v="4" aria-pressed="false">فور</button>
-        <button type="button" data-v="g" aria-pressed="false">قهوة</button>
-      </div>
-    </div>
-
-    <div class="field">
-      <span class="label">كبوت (فريق أخذ كل الأكلات)</span>
-      <div class="seg" id="kabSeg">
-        <button type="button" data-v="n" aria-pressed="true">لا</button>
-        <button type="button" data-v="0" class="tA" id="kabA" aria-pressed="false">لنا</button>
-        <button type="button" data-v="1" class="tB" id="kabB" aria-pressed="false">لهم</button>
-      </div>
-    </div>
-
-    <div class="field" id="cardsField">
-      <span class="label">نقاط الأكلات (المجموع <span id="cardsTotal">162</span> مع أكلة الأرض)</span>
-      <div class="pair">
-        <div class="field"><span class="hint" id="cardsLabelA">لنا</span><input type="number" id="cardsA" min="0" inputmode="numeric" placeholder="0"></div>
-        <div class="field"><span class="hint" id="cardsLabelB">لهم</span><input type="number" id="cardsB" min="0" inputmode="numeric" placeholder="0"></div>
-      </div>
-      <span class="hint">اكتب نقاط الخصم في خانة فريقه، والفريق الثاني يُحسب مشتريًا تلقائيًا.</span>
-    </div>
-
-    <div class="field">
-      <span class="label">المشاريع</span>
-      <div class="proj" id="proj"></div>
-    </div>
-
-    <div class="preview" id="preview" aria-live="polite"></div>
-    <button type="button" class="primary" id="save">سجّل الجولة</button>
-  </section>
-
-  <section class="card" aria-label="الجولات">
-    <div class="top"><h2>الجولات</h2><span class="hint" id="roundCount"></span></div>
-    <div class="hist" id="hist"></div>
-    <div class="actions">
-      <button type="button" class="ghost" id="undo">حذف آخر جولة</button>
-      <button type="button" class="ghost danger" id="reset">لعبة جديدة</button>
-    </div>
-  </section>
-
-  <p class="note">طريقة الحساب: الحكم مجموعه 16 والصن 26، وتُقرَّب نقاط الأكلات إلى أقرب عشرة (إلى أقرب خمسة في الصن). المشاريع بالحكم: سرا 2، خمسين 5، مية 10. وبالصن تتضاعف: 4 و10 و20، والأربعمية 40 (وبالحكم تُحسب مية). البلوت 2 ولا يتضاعف. الفريق اللي تكتب نقاطه هو الخصم، والثاني المشتري ويُحسب له الباقي. في الحكم إذا زاد مجموع الخصم على المشتري خسر المشتري وأخذ الخصم كل النقاط، وإذا تساويا (81 مقابل 81) فهو تعادل ولكل فريق نقاطه. في الصن لا يوجد تعادل: عند 65 مقابل 65 يأخذ المشتري 66 (14 نقطة) والخصم 64 (12). الكبوت 25 في الحكم و44 في الصن لمن أخذ كل الأكلات مع مشاريعه. الدبل والثري والفور تضاعف نقاط الفائز، والقهوة تعطيه اللعبة كاملة (في الصن عادي ودبل فقط). القواعد تختلف بين المناطق، فعدّل النقاط يدويًا إذا لزم.</p>
+<div class="view-panel" id="mainView">
+<div class="top">
+<h1>حاسبة البلوت</h1>
+<label class="target">اللعب إلى <input id="target" inputmode="numeric" max="999" min="10" type="number" value="152"/></label>
 </div>
 
+<section aria-label="نتيجة اللعبة" class="result-section" hidden="" id="resultSection">
+<div class="banner" hidden="" id="banner"></div>
+</section>
+<section aria-label="جولة جديدة" class="card">
+<section aria-label="النتيجة" class="board inline-scoreboard">
+<div class="team a">
+<input aria-label="اسم الفريق الأول" id="nameA" maxlength="14" type="text" value="لنا"/>
+<div class="score" id="scoreA">0</div>
+<div class="track"><i id="trackA"></i></div>
+</div>
+<div class="team b">
+<input aria-label="اسم الفريق الثاني" id="nameB" maxlength="14" type="text" value="لهم"/>
+<div class="score" id="scoreB">0</div>
+<div class="track"><i id="trackB"></i></div>
+</div>
+</section>
+<div class="field compact-game-inputs">
+<div class="compact-mode-line">
+<span class="label">نوع اللعب</span>
+<div aria-label="نوع اللعب" class="seg" id="modeSeg">
+<button aria-pressed="true" data-v="hukm" type="button">حكم</button>
+<button aria-pressed="false" data-v="sun" type="button">صن</button>
+</div>
+</div>
+</div>
+<div class="field" id="cardsField">
+<span hidden="" id="cardsTotal">162</span>
+<div class="pair">
+<div class="field"><span class="hint" id="cardsLabelA">لنا</span><input id="cardsA" inputmode="numeric" min="0" placeholder="0" type="number"/></div>
+<div class="field"><span class="hint" id="cardsLabelB">لهم</span><input id="cardsB" inputmode="numeric" min="0" placeholder="0" type="number"/></div>
+</div>
+<span class="hint">اكتب نقاط الخصم في خانة فريقه، والفريق الثاني يُحسب مشتريًا تلقائيًا.</span>
+
+</div>
+<div class="field">
+<div aria-label="المشاريع والكبوت" class="proj" id="proj"></div>
+</div>
+<div class="save-mult-row">
+<button class="primary" id="save" type="button">سجّل الجولة</button>
+<label class="mult-picker"><span class="label">الدبل</span><select aria-label="قيمة الدبل" id="multSelect"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="g">قهوة</option></select></label>
+</div>
+<div aria-live="polite" class="preview compact-round-result" id="preview"></div>
+</section>
+<section aria-label="الجولات" class="card">
+<div class="top"><h2>الجولات</h2><span class="hint" id="roundCount"></span></div>
+<div class="hist" id="hist"></div>
+<div class="actions">
+<button class="ghost" id="undo" type="button">حذف آخر جولة</button>
+<button class="ghost danger" id="reset" type="button">لعبة جديدة</button>
+</div>
+</section>
+</div>
+<section class="victory-page" id="victoryPage" hidden aria-label="نتيجة اللعبة النهائية">
+  <div class="victory-brand">✦ حاسبة البلوت ✦</div>
+  <div class="victory-box" id="victoryBox"></div>
+  <div class="victory-scores" id="victoryScores"></div>
+  <button class="primary" id="victoryNew" type="button">حفظ اللعبة وبدء لعبة جديدة</button>
+  <button class="ghost" id="victoryBack" type="button">العودة لمراجعة الجولات</button>
+</section>
+<section class="card view-panel" hidden="" id="archiveView"><h2>اللعبات السابقة</h2><p class="hint">تُحفظ اللعبة السابقة عند الضغط على «لعبة جديدة».</p><div id="archiveList"></div><button class="ghost danger" id="clearArchive" type="button">حذف جميع اللعبات السابقة</button></section>
+<section class="card view-panel" hidden="" id="helpView"><h2>طريقة اللعب والحساب</h2> <p class="note">طريقة الحساب: الحكم مجموعه 16 والصن 26، وتُقرَّب نقاط الأكلات إلى أقرب عشرة (إلى أقرب خمسة في الصن). المشاريع بالحكم: سرا 2، خمسين 5، مية 10. وبالصن تتضاعف: 4 و10 و20، والأربعمية 40 (وبالحكم تُحسب مية). البلوت 2 ولا يتضاعف. الفريق اللي تكتب نقاطه هو الخصم، والثاني المشتري ويُحسب له الباقي. في الحكم إذا زاد مجموع الخصم على المشتري خسر المشتري وأخذ الخصم كل النقاط، وإذا تساويا (81 مقابل 81) فهو تعادل ولكل فريق نقاطه. في الصن لا يوجد تعادل: عند 65 مقابل 65 يأخذ المشتري 66 (14 نقطة) والخصم 64 (12). الكبوت 25 في الحكم و44 في الصن لمن أخذ كل الأكلات مع مشاريعه. الدبل والثري والفور تضاعف نقاط الفائز، والقهوة تعطيه اللعبة كاملة (في الصن عادي ودبل فقط). القواعد تختلف بين المناطق، فعدّل النقاط يدويًا إذا لزم.</p></section>
+<nav aria-label="التنقل" class="bottom-nav"><button aria-current="page" data-view="main" type="button">▦ الحاسبة</button><button data-view="archive" type="button">◷ اللعبات السابقة</button><button data-view="help" type="button">☷ طريقة اللعب</button></nav>
+<div aria-hidden="true" class="celebration" id="celebration"></div>
+</div>
 <script>
 (function () {
   var KEY = "baloot-game-v1";
@@ -242,7 +475,7 @@ input[type=number], input[type=text] {
     var p = [0, 0], bal = [0, 0];
     for (var t = 0; t < 2; t++) {
       PROJ.forEach(function (d) {
-        var n = f.proj[t][d.k] || 0;
+        var n = (f.mode === "hukm" && d.k === "four") ? 0 : (f.proj[t][d.k] || 0);
         var u = (sun ? d.sun : d.hukm) * n;
         if (d.k === "baloot") bal[t] += u; else p[t] += u;
       });
@@ -257,16 +490,16 @@ input[type=number], input[type=text] {
     var cards = [0, 0];
     var opp = f.oppSide, buyer = opp == null ? null : 1 - opp;
     if (f.opp != null && opp != null) {
-      if (sun) {
-        /* صن: النقاط = تقريب (الأبناط ÷ 10) × 2، والخامسة تُقرَّب لصالح الأكبر، وعند 65 مقابل 65 للمشتري */
-        var fo2 = Math.max(0, Math.min(130, f.opp)), bo2 = 130 - fo2, oppLarger = fo2 > bo2;
-        var rnd = function (x, up) { var r = x % 10, b = Math.floor(x / 10); return r > 5 ? b + 1 : r < 5 ? b : (up ? b + 1 : b); };
-        cards[opp] = 2 * rnd(fo2, oppLarger);
-        cards[buyer] = 2 * rnd(bo2, !oppLarger);
+      /* تقرّب نقاط الخصم فقط، ويأخذ المشتري باقي مجموع الأكلات.
+         الرقم المنتهي بـ5 يقرب للأسفل، والاستثناء صن 65/65. */
+      var rawOpp = Math.max(0, Math.min(sun ? 130 : 162, f.opp));
+      if (sun && rawOpp === 65) {
+        cards[opp] = 12;
+        cards[buyer] = 14;
       } else {
-        var oppU = Math.max(0, Math.min(total, Math.round(f.opp / 10)));
-        cards[opp] = oppU;
-        cards[buyer] = total - oppU;
+        var roundedOpp = Math.floor((rawOpp + 4) / 10);
+        cards[opp] = Math.min(total, roundedOpp * (sun ? 2 : 1));
+        cards[buyer] = total - cards[opp];
       }
     }
     var tot = [cards[0] + p[0], cards[1] + p[1]];
@@ -275,7 +508,7 @@ input[type=number], input[type=text] {
     var base = sun ? 130 : 162, mul = sun ? 5 : 10;
     var raw = [0, 0], fo = Math.max(0, Math.min(base, f.opp));
     raw[opp] = fo; raw[buyer] = base - fo;
-    for (var q = 0; q < 2; q++) PROJ.forEach(function (d) { raw[q] += (f.proj[q][d.k] || 0) * (sun ? d.sun : d.hukm) * mul; });
+    for (var q = 0; q < 2; q++) PROJ.forEach(function (d) { raw[q] += (f.mode === "hukm" && d.k === "four" ? 0 : (f.proj[q][d.k] || 0)) * (sun ? d.sun : d.hukm) * mul; });
     var tie = !sun && raw[buyer] === raw[opp];
     var win = sun ? raw[buyer] >= raw[opp] : raw[buyer] > raw[opp];
     if (tie) {
@@ -288,7 +521,13 @@ input[type=number], input[type=text] {
     else {
       if (m === 1 && win) { res = [tot[0], tot[1]]; }
       else { res[winner] = (tot[0] + tot[1]) * m; }
-      res[0] += bal[0]; res[1] += bal[1];
+      if (!win) {
+        /* سقوط المشتري: جميع نقاط الجولة، بما فيها البلوت، للخصم. */
+        res = [0, 0];
+        res[opp] = (tot[0] + tot[1] + bal[0] + bal[1]) * m;
+      } else {
+        res[0] += bal[0]; res[1] += bal[1];
+      }
     }
     return { res: res, win: win, buyer: buyer, tie: false, kaboot: null };
   }
@@ -318,8 +557,11 @@ input[type=number], input[type=text] {
         (form.proj[t][d.k] || 0) + '</b><button type="button" data-t="' + t + '" data-k="' + d.k + '" data-d="1" aria-label="زيادة ' + d.n + '">+</button></span>';
     }
     var html = '<span class="head a">' + esc(state.names[0]) + '</span><span></span><span class="head b">' + esc(state.names[1]) + '</span>';
+    html += '<button type="button" class="kab-project kab-a" data-kab="0" aria-pressed="' + (form.kaboot === 0) + '">كبوت</button>' +
+      '<span class="name kab-caption">كبوت</span>' +
+      '<button type="button" class="kab-project kab-b" data-kab="1" aria-pressed="' + (form.kaboot === 1) + '">كبوت</button>';
     PROJ.forEach(function (d) {
-      var allowed = sun ? d.sun > 0 : d.hukm > 0;
+      var allowed = sun ? d.sun > 0 : (d.hukm > 0 && d.k !== "four");
       if (!allowed) return;
       html += stepper(0, d) + '<span class="name">' + d.n + '</span>' + stepper(1, d);
     });
@@ -329,13 +571,12 @@ input[type=number], input[type=text] {
   function renderForm() {
     setSeg($("modeSeg"), form.mode);
     if (form.mode === "sun" && form.mult !== "1" && form.mult !== "2") form.mult = "1";
-    Array.prototype.forEach.call($("multSeg").children, function (btn) {
-      var v = btn.getAttribute("data-v");
-      btn.hidden = form.mode === "sun" && v !== "1" && v !== "2";
+    var multSelect = $("multSelect");
+    Array.prototype.forEach.call(multSelect.options, function (opt) {
+      opt.hidden = form.mode === "sun" && opt.value !== "1" && opt.value !== "2";
+      opt.disabled = opt.hidden;
     });
-    setSeg($("multSeg"), form.mult);
-    setSeg($("kabSeg"), form.kaboot == null ? "n" : form.kaboot);
-    $("kabA").textContent = state.names[0]; $("kabB").textContent = state.names[1];
+    multSelect.value = form.mult;
     $("cardsField").hidden = form.kaboot != null;
     updateCardLabels();
     $("cardsTotal").textContent = cardTotal();
@@ -362,9 +603,49 @@ input[type=number], input[type=text] {
     if ((s[0] >= state.target || s[1] >= state.target) && state.rounds.length) {
       var w = s[0] >= s[1] ? 0 : 1;
       b.hidden = false;
+      $("resultSection").hidden = true;
       b.className = "banner" + (w === 1 ? " b" : "");
-      b.textContent = "فاز " + state.names[w] + " باللعبة " + s[w] + " مقابل " + s[1 - w];
-    } else { b.hidden = true; }
+      b.innerHTML = w === 0 ? '<div class="win-crowns">♛　♛</div><div class="win-title">مبروك لنا</div><div class="win-sub">القمو يا هطوف 😂🔥</div><div class="win-foot">✦ اكتملت اللعبة ✦</div>' : '<div class="win-sub">للأسف</div><div class="win-title">انتصر الأعداء</div><div class="win-foot">✦ اكتملت اللعبة ✦</div>';
+    } else { b.hidden = true; $("resultSection").hidden = true; }
+  }
+
+  function roundExplanation(r) {
+    var f=r.formSnapshot;
+    function num(v){return v==null?'—':String(v);}
+    var rows=[];
+    function row(label,a,b,extra){return '<div class="numeric-line'+(extra?' numeric-total':'')+'"><span>'+label+'</span><strong class="a">'+num(a)+'</strong><strong class="b">'+num(b)+'</strong></div>';}
+    var html='<div class="numeric-details"><div class="numeric-head"><span></span><b class="a">لنا</b><b class="b">لهم</b></div>';
+    if (!f) return html+row('النشرة',r.res[0],r.res[1],true)+'</div>';
+    var base=f.mode==='sun'?130:162;
+    var raw=[null,null], projectTotals=[0,0], projectCounts=[0,0];
+    if(f.opp!=null && f.oppSide!=null){
+      raw[f.oppSide]=Number(f.opp);
+      raw[1-f.oppSide]=base-Number(f.opp);
+    }
+    html+=row('الأبناط',raw[0],raw[1]);
+    var weights=f.mode==='sun'?{sira:40,fifty:100,hundred:200,four:400,baloot:20}:{sira:20,fifty:50,hundred:100,baloot:20};
+    [{k:'sira',n:'سرا'},{k:'fifty',n:'خمسين'},{k:'hundred',n:'مية'},{k:'four',n:'أربعمية'},{k:'baloot',n:'بلوت'}].forEach(function(d){
+      if(!weights[d.k])return;
+      var vals=[0,0];
+      for(var t=0;t<2;t++){
+        vals[t]=(Number(f.proj && f.proj[t] && f.proj[t][d.k])||0)*weights[d.k];
+        projectTotals[t]+=vals[t];
+        projectCounts[t]+=Number(f.proj && f.proj[t] && f.proj[t][d.k])||0;
+      }
+      if(vals[0]||vals[1]){
+        var counts=[0,1].map(function(t){return Number(f.proj && f.proj[t] && f.proj[t][d.k])||0;});
+        function projectCell(t){return String(vals[t])+(counts[t]>1?'<small class="project-quantity">x'+counts[t]+'</small>':'');}
+        html+='<div class="numeric-line"><span>'+d.n+'</span><strong class="a">'+projectCell(0)+'</strong><strong class="b">'+projectCell(1)+'</strong></div>';
+      }
+    });
+    html+='<div class="numeric-line"><span>المشاريع</span><strong class="a">'+projectTotals[0]+(projectCounts[0]>1?'<small class="project-quantity">x'+projectCounts[0]+'</small>':'')+'</strong><strong class="b">'+projectTotals[1]+(projectCounts[1]>1?'<small class="project-quantity">x'+projectCounts[1]+'</small>':'')+'</strong></div>';
+    var sums=raw.map(function(v,i){return v==null?null:v+projectTotals[i];});
+    html+=row('المجموع',sums[0],sums[1],true);
+    if(sums[0]!=null && sums[1]!=null){
+      html+='<div class="numeric-compare">'+(sums[0]===sums[1]?'تعادل '+sums[0]+' = '+sums[1]:sums[0]>sums[1]?'لنا '+sums[0]+' &gt; لهم '+sums[1]:'لهم '+sums[1]+' &gt; لنا '+sums[0])+'</div>';
+    }
+    html+=row('النشرة',r.res[0],r.res[1],true);
+    return html+'</div>';
   }
 
   function renderHist() {
@@ -376,7 +657,8 @@ input[type=number], input[type=text] {
       var r = state.rounds[i];
       var meta = (r.mode === "sun" ? "صن" : "حكم") + (r.kaboot != null ? " · كبوت " + esc(state.names[r.kaboot]) : r.buyer != null ? " · المشتري " + esc(state.names[r.buyer]) + (r.tie ? " تعادل" : r.win ? " نجح" : " خسر") : "") +
         (r.mult === "g" ? " · قهوة" : r.mult && r.mult !== "1" ? " · ×" + r.mult : "");
-      html += '<div class="item"><span class="n">' + (i + 1) + '</span><span class="meta">' + meta + '</span><span class="pts"><span class="a">' + r.res[0] + '</span> – <span class="b">' + r.res[1] + '</span></span></div>';
+      html += '<div class="round-entry"><div class="item"><span class="n">' + (i + 1) + '</span><span class="meta">' + meta + '</span><span class="pts"><span class="a">' + r.res[0] + '</span> – <span class="b">' + r.res[1] + '</span></span></div>' +
+        '<details class="round-details"><summary>شرح المزيد</summary>' + roundExplanation(r) + '</details></div>';
     }
     h.innerHTML = html;
   }
@@ -387,6 +669,7 @@ input[type=number], input[type=text] {
   $("modeSeg").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
     form.mode = b.getAttribute("data-v");
+    if (form.mode === "hukm") { form.proj.forEach(function(p){p.four=0;}); }
     if (form.mode === "sun") { form.proj.forEach(function (p) { p.baloot = 0; }); }
     form.opp = null; form.oppSide = null; $("cardsA").value = ""; $("cardsB").value = "";
     renderForm();
@@ -408,32 +691,33 @@ input[type=number], input[type=text] {
   }
   $("cardsA").addEventListener("input", function () { onCards(0); });
   $("cardsB").addEventListener("input", function () { onCards(1); });
-  $("multSeg").addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b) return;
-    form.mult = b.getAttribute("data-v");
-    renderForm();
-  });
-  $("kabSeg").addEventListener("click", function (e) {
-    var b = e.target.closest("button"); if (!b) return;
-    var v = b.getAttribute("data-v");
-    form.kaboot = v === "n" ? null : Number(v);
+  $("multSelect").addEventListener("change", function () {
+    form.mult = this.value;
     renderForm();
   });
   $("proj").addEventListener("click", function (e) {
     var b = e.target.closest("button"); if (!b) return;
+    if (b.hasAttribute("data-kab")) {
+      var side = Number(b.getAttribute("data-kab"));
+      form.kaboot = form.kaboot === side ? null : side;
+      renderForm();
+      return;
+    }
     var t = Number(b.getAttribute("data-t")), k = b.getAttribute("data-k"), d = Number(b.getAttribute("data-d"));
     form.proj[t][k] = Math.max(0, Math.min(9, (form.proj[t][k] || 0) + d));
     renderProj(); renderPreview();
   });
 
   $("save").addEventListener("click", function () {
+    if(scores().some(function(x){return x>=state.target;})){showVictory(true);return;}
     var r = compute(form);
-    state.rounds.push({ mode: form.mode, buyer: r.buyer, mult: form.mult, win: r.win, tie: r.tie, kaboot: r.kaboot, res: r.res });
+    state.rounds.push({ formSnapshot: JSON.parse(JSON.stringify(form)), namesAtRound: state.names.slice(), mode: form.mode, buyer: r.buyer, mult: form.mult, win: r.win, tie: r.tie, kaboot: r.kaboot, res: r.res });
     save();
     var keepMode = form.mode;
     form = newForm(); form.mode = keepMode;
     $("cardsA").value = ""; $("cardsB").value = "";
     renderAll();
+    if (scores().some(function(x){return x>=state.target;})) { var sc=scores(); showVictory(true); if(sc[0]>=sc[1]) launchCelebration(); }
   });
   $("undo").addEventListener("click", function () { state.rounds.pop(); save(); renderBoard(); renderHist(); });
 
@@ -446,7 +730,7 @@ input[type=number], input[type=text] {
       return;
     }
     clearTimeout(resetTimer); resetArmed = false; btn.textContent = "لعبة جديدة";
-    state.rounds = []; save(); form = newForm(); $("cardsA").value = ""; $("cardsB").value = ""; renderAll();
+    archiveAndReset();
   });
 
   $("target").addEventListener("change", function () {
@@ -460,13 +744,39 @@ input[type=number], input[type=text] {
     });
   });
 
+
+  function showVictory(show) {
+    var s=scores(), reached=(s[0]>=state.target||s[1]>=state.target)&&state.rounds.length>0;
+    var page=$("victoryPage");
+    if(!show||!reached){page.hidden=true;document.body.classList.remove('on-victory');return;}
+    var w=s[0]>=s[1]?0:1;
+    $("victoryBox").innerHTML=w===0?'<div class="win-crowns">♛　♛</div><div class="win-title">مبروك لنا</div><div class="win-sub">القمو يا هطوف 😂🔥</div>':'<div class="win-sub">للأسف</div><div class="win-title">انتصر الأعداء</div>';
+    $("victoryScores").innerHTML='<div><span>'+esc(state.names[0])+'</span><strong class="a">'+s[0]+'</strong></div><span class="vs">—</span><div><span>'+esc(state.names[1])+'</span><strong class="b">'+s[1]+'</strong></div>';
+    page.hidden=false;document.body.classList.add('on-victory');window.scrollTo(0,0);
+  }
+  function archiveAndReset(){
+    if(state.rounds.length){var games=getArchive(), totals=scores();games.unshift({date:new Date().toLocaleString('ar-SA'),names:state.names.slice(),scores:totals,rounds:state.rounds.slice(),winner:totals[0]>=totals[1]?0:1});try{localStorage.setItem(ARCHIVE_KEY,JSON.stringify(games));}catch(e){}}
+    state.rounds=[];save();form=newForm();$('cardsA').value='';$('cardsB').value='';renderAll();showVictory(false);
+  }
+  $('victoryNew').addEventListener('click',archiveAndReset);
+  $('victoryBack').addEventListener('click',function(){showVictory(false);});
+  var ARCHIVE_KEY="baloot-archive-v1";
+  function getArchive(){try{return JSON.parse(localStorage.getItem(ARCHIVE_KEY)||"[]")||[];}catch(e){return [];}}
+  function renderArchive(){var list=$("archiveList"),games=getArchive();if(!games.length){list.innerHTML='<p class="empty">لا توجد لعبات سابقة بعد.</p>';return;}
+    list.innerHTML=games.map(function(g,i){return '<div class="archive-item"><strong>لعبة '+(games.length-i)+'</strong><div class="hint">'+esc(g.date)+'</div><div>'+esc(g.names[0])+' <b style="color:#42f5b5">'+g.scores[0]+'</b> — '+esc(g.names[1])+' <b style="color:#75caff">'+g.scores[1]+'</b></div><div class="hint">الفائز: '+esc(g.names[g.winner])+' · '+g.rounds.length+' جولة</div><button class="ghost danger" type="button" data-delete="'+i+'">حذف هذه اللعبة</button></div>';}).join('');}
+  $("archiveList").addEventListener("click",function(e){var b=e.target.closest('[data-delete]');if(!b)return;var i=Number(b.getAttribute('data-delete'));if(!confirm('حذف هذه اللعبة من السجل؟'))return;var games=getArchive();games.splice(i,1);localStorage.setItem(ARCHIVE_KEY,JSON.stringify(games));renderArchive();});
+  $("clearArchive").addEventListener("click",function(){if(!confirm('هل تريد حذف جميع اللعبات السابقة نهائيًا؟'))return;localStorage.removeItem(ARCHIVE_KEY);renderArchive();});
+  Array.prototype.forEach.call(document.querySelectorAll('.bottom-nav button'),function(b){b.addEventListener('click',function(){var v=b.getAttribute('data-view');['main','archive','help'].forEach(function(n){$(n+'View').hidden=n!==v;});Array.prototype.forEach.call(document.querySelectorAll('.bottom-nav button'),function(x){x.removeAttribute('aria-current');});b.setAttribute('aria-current','page');if(v==='archive')renderArchive();window.scrollTo({top:0,behavior:'smooth'});});});
+  var celebrationTimer=null;
+  function launchCelebration(){if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;var layer=$("celebration");layer.innerHTML='';if(celebrationTimer)clearTimeout(celebrationTimer);var colors=['#f6d47b','#d8a747','#42f5b5','#fff1ba'];for(var i=0;i<85;i++){var el=document.createElement('i');el.className='confetti';el.style.left=(Math.random()*100)+'%';el.style.background=colors[i%colors.length];el.style.animationDelay=(Math.random()*1.3)+'s';el.style.animationDuration=(2.8+Math.random()*2)+'s';el.style.setProperty('--drift',((Math.random()-.5)*220)+'px');layer.appendChild(el);}celebrationTimer=setTimeout(function(){layer.innerHTML='';},5200);}
+
   load();
   $("target").value = state.target;
   $("nameA").value = state.names[0];
   $("nameB").value = state.names[1];
   renderAll();
+  showVictory(true);
 })();
 </script>
-
 <script>if ("serviceWorker" in navigator && location.protocol !== "file:") { window.addEventListener("load", function(){ navigator.serviceWorker.register("./sw.js").catch(function(e){console.warn("SW registration failed",e);}); }); }</script>
 </body></html>
