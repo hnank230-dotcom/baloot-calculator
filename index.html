@@ -2,7 +2,7 @@
 <html><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#080d12" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/><meta content="حاسبة البلوت" name="apple-mobile-web-app-title"/><link href="./manifest.webmanifest" rel="manifest"/><link href="./icons/icon-192.png" rel="apple-touch-icon"/><title>حاسبة البلوت</title><style id="kaboot-inline-design">
 .proj .kab-project{min-height:40px;border:1px solid #b9914b;border-radius:11px;background:#18201e;color:#f6d990;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;transition:background .2s,box-shadow .2s}
 .proj .kab-project.kab-a[aria-pressed="true"]{background:#42f5b5;color:#09251d;box-shadow:0 0 14px #42f5b555}
-.proj .kab-project.kab-b[aria-pressed="true"]{background:#75caff;color:#0a1d30;box-shadow:0 0 14px #75caff55}
+.proj .kab-project.kab-b[aria-pressed="true"]{background:#ff646e;color:#0a1d30;box-shadow:0 0 14px #ff646e55}
 .proj .kab-caption{font-size:12px;color:#c7a96f}
 #save{min-height:50px}
 .save-mult-row{display:flex;align-items:end;gap:10px;direction:rtl}
@@ -61,6 +61,63 @@
 .compact-mode-line>.label{text-align:right!important;}
 .compact-mode-line .seg{width:100%!important;flex:auto!important;max-width:none!important;}
 .compact-mode-line .seg button{min-height:38px!important;}
+</style>
+
+<style id="approved-iphone-compact-2026">
+/* Approved mobile layout: preserve main score size, reduce unused whitespace. */
+:root,:root[data-theme="dark"],:root[data-theme="light"]{--team-b:#ff646e!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{padding-top:max(5px,env(safe-area-inset-top,0px))!important;padding-bottom:max(12px,env(safe-area-inset-bottom,0px))!important;padding-left:max(9px,env(safe-area-inset-left,0px))!important;padding-right:max(9px,env(safe-area-inset-right,0px))!important}
+.wrap{gap:8px!important}
+#mainView{gap:7px!important}
+.card{padding:11px 12px!important;gap:9px!important;border-radius:17px!important}
+.card[aria-label="جولة جديدة"]{padding:9px 11px!important;gap:7px!important}
+.card[aria-label="جولة جديدة"] .inline-scoreboard{padding:2px 0 5px!important;gap:4px!important;margin:0!important;border-top:0!important}
+.card[aria-label="جولة جديدة"] .inline-scoreboard .team{padding:0 5px!important;gap:0!important}
+.card[aria-label="جولة جديدة"] .inline-scoreboard .team input[type=text]{height:21px!important;min-height:21px!important;padding:0 2px!important;margin:0!important}
+/* Score font-size intentionally NOT changed. */
+.card[aria-label="جولة جديدة"] .inline-scoreboard .score{margin:0!important;line-height:1.08!important}
+.card[aria-label="جولة جديدة"] .inline-scoreboard .track{margin-top:1px!important;height:3px!important}
+.compact-mode-line{gap:3px!important}
+.compact-mode-line .seg{padding:2px!important}
+.compact-mode-line .seg button{min-height:37px!important}
+#cardsField{gap:3px!important}
+#cardsField .pair{gap:6px!important}
+#cardsField .pair .field{gap:2px!important}
+#cardsField>.hint{margin:0!important;line-height:1.35!important}
+.proj{gap:7px 7px!important;padding:1px 0!important}
+.proj .name{line-height:1.3!important}
+.proj .head{line-height:1.3!important}
+.step{gap:4px!important}
+.step button{min-width:36px!important;min-height:38px!important;width:36px!important;height:38px!important}
+.proj .kab-project{min-height:38px!important}
+.save-mult-row{gap:7px!important}
+.save-mult-row #save{min-height:46px!important;padding:9px!important}
+.mult-picker{gap:2px!important}
+.mult-picker select{height:46px!important;min-height:46px!important}
+.card[aria-label="جولة جديدة"] .compact-round-result{margin-top:0!important;padding:5px 9px!important;gap:0!important}
+.card[aria-label="جولة جديدة"] .compact-round-result .row{min-height:22px!important}
+.card[aria-label="الجولات"] .top{gap:5px!important}
+.hist .item{padding:8px 0!important}
+.round-entry{padding-bottom:5px!important}
+.round-details{padding:6px 9px!important}
+.numeric-details{margin-top:4px!important}
+.numeric-head,.numeric-line{padding:5px 3px!important}
+.numeric-compare{padding:5px 3px!important}
+.actions{gap:6px!important}
+.actions button{padding:7px 9px!important;min-height:40px!important}
+.bottom-nav{padding:5px!important;gap:5px!important;border-radius:12px!important}
+.bottom-nav button{padding:7px 3px!important;min-height:40px!important}
+.archive-item{padding:9px!important;margin:6px 0!important}
+.note{padding:9px!important}
+.victory-page{min-height:calc(100dvh - 30px)!important;gap:11px!important;padding:8px 0!important}
+.victory-box{padding:20px 12px!important}
+.victory-scores{padding:10px!important;gap:8px!important}
+.victory-box .win-crowns{margin-bottom:6px!important}
+.team.b .score,.preview .b,.hist .pts .b,.proj .head.b,.step.b b,.round-details .b,.victory-scores .b{color:#ff646e!important;-webkit-text-fill-color:#ff646e!important}
+.team.b .track i{background:#ff646e!important}
+.proj .kab-project.kab-b[aria-pressed="true"]{background:#ff646e!important;color:#2a080b!important;box-shadow:0 0 12px #ff646e55!important}
+@media(max-width:380px){.card[aria-label="جولة جديدة"]{padding:8px 9px!important}.card{padding:9px!important}.proj{gap:6px 4px!important}.step{gap:3px!important}.step button{min-width:33px!important;width:33px!important;min-height:36px!important;height:36px!important}}
 </style>
 </head><body>
 <meta content="cover" name="claude:viewport-fit-sides"/>
@@ -216,10 +273,10 @@ button:focus-visible,input:focus-visible{outline:2px solid #ffe29a;outline-offse
 /* Neon dark visual redesign — original calculator logic preserved */
 :root,:root[data-theme="dark"],:root[data-theme="light"]{
 --bg:#080d12;--surface:#142029;--fg:#effff9;--muted:#9cb8b1;--line:#2c4846;
---team-a:#42f5b5;--team-b:#75caff;--on-accent:#061b14;--good:#42f5b5;--bad:#ff8997;color-scheme:dark}
+--team-a:#42f5b5;--team-b:#ff646e;--on-accent:#061b14;--good:#42f5b5;--bad:#ff8997;color-scheme:dark}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
 --bg:#080d12;--surface:#142029;--fg:#effff9;--muted:#9cb8b1;--line:#2c4846;
---team-a:#42f5b5;--team-b:#75caff;--on-accent:#061b14;--good:#42f5b5;--bad:#ff8997}}
+--team-a:#42f5b5;--team-b:#ff646e;--on-accent:#061b14;--good:#42f5b5;--bad:#ff8997}}
 html{background:#080d12;color-scheme:dark}
 body{background:radial-gradient(ellipse at 50% -12%,#174b3d 0%,transparent 45%),#080d12;min-height:100vh;padding-block:26px 60px}
 .wrap{max-width:560px;gap:18px}
@@ -235,7 +292,7 @@ h2{font-size:20px}
 .team.b:before{background:var(--team-b);box-shadow:0 0 18px var(--team-b)}
 .team input[type=text]{color:#f2fff9;font-size:17px}
 .score{font-size:clamp(54px,14vw,78px);font-weight:700;text-shadow:0 0 20px #42f5b533}
-.team.b .score{text-shadow:0 0 20px #75caff33}
+.team.b .score{text-shadow:0 0 20px #ff646e33}
 .track{height:7px;border-radius:8px;background:#253a3e}
 .track i{border-radius:8px}
 input[type=number],input[type=text]{background:#0b171e;border:1px solid #34534f;border-radius:12px;color:#f2fff9;min-height:43px}
@@ -244,7 +301,7 @@ input[type=number],input[type=text]{background:#0b171e;border:1px solid #34534f;
 .seg button{border-radius:9px;padding:11px 4px;min-height:44px;font-weight:600}
 .seg button+button{border-inline-start:0}
 .seg button[aria-pressed=true],.seg.a button[aria-pressed=true].t0,.seg button[aria-pressed=true].tA{background:#42f5b5;color:#071a13;box-shadow:0 4px 18px #42f5b522}
-.seg button[aria-pressed=true].tB{background:#75caff;color:#071824}
+.seg button[aria-pressed=true].tB{background:#ff646e;color:#071824}
 .proj{gap:13px 9px;padding:7px 0}
 .proj .name{color:#e0f1ea}
 .step{gap:6px}
@@ -275,7 +332,7 @@ input::placeholder{color:#8fa9a2;opacity:1}
 </style>
 <style id="gold-text-final">
 /* Gold typography and borders, original green/blue scoring preserved. */
-:root{--team-a:#42f5b5;--team-b:#75caff;--fg:#f5dfaa;--muted:#d3bc8c;--line:#8d7043;--on-accent:#061b14}
+:root{--team-a:#42f5b5;--team-b:#ff646e;--fg:#f5dfaa;--muted:#d3bc8c;--line:#8d7043;--on-accent:#061b14}
 body{color:#f5dfaa;background:radial-gradient(ellipse at 50% -12%,#3b2c1b 0%,transparent 48%),#080d12}
 h1,h2,.label,.proj .name,.hint,.target,.note,.hist .meta,.hist .n,.empty,.verdict,.preview,.card,.team{color:#f3d493;font-weight:700}
 h1{color:#ffdf90;text-shadow:0 0 18px #d5a44b55}
@@ -285,12 +342,12 @@ h1{color:#ffdf90;text-shadow:0 0 18px #d5a44b55}
 button,.seg button,.ghost,.step button{font-weight:700;color:#f5d58e}
 .seg button[aria-pressed=true]{color:#071a13}
 .team.a .score,.preview .a,.hist .pts .a,.proj .head.a,.step.a b{color:#42f5b5!important;-webkit-text-fill-color:#42f5b5}
-.team.b .score,.preview .b,.hist .pts .b,.proj .head.b,.step.b b{color:#75caff!important;-webkit-text-fill-color:#75caff}
-.team.a .track i{background:#42f5b5!important}.team.b .track i{background:#75caff!important}
+.team.b .score,.preview .b,.hist .pts .b,.proj .head.b,.step.b b{color:#ff646e!important;-webkit-text-fill-color:#ff646e}
+.team.a .track i{background:#42f5b5!important}.team.b .track i{background:#ff646e!important}
 .team.a:before{background:#42f5b5!important;box-shadow:0 0 18px #42f5b5}
-.team.b:before{background:#75caff!important;box-shadow:0 0 18px #75caff}
+.team.b:before{background:#ff646e!important;box-shadow:0 0 18px #ff646e}
 .seg button[aria-pressed=true],.seg button[aria-pressed=true].tA{background:#42f5b5;color:#071a13}
-.seg button[aria-pressed=true].tB{background:#75caff;color:#071824}
+.seg button[aria-pressed=true].tB{background:#ff646e;color:#071824}
 .primary{background:linear-gradient(120deg,#ffe5a5,#d8a747);color:#201606;font-weight:800}
 .ghost,.step button{border-color:#947442}
 </style>
@@ -349,7 +406,7 @@ button,.seg button,.ghost,.step button{font-weight:700;color:#f5d58e}
 .round-details summary{cursor:pointer;color:#f5d181;font-weight:800;list-style:none}
 .round-details summary:before{content:'＋ ';color:#42f5b5}
 .round-details[open] summary:before{content:'− '}
-.round-details p{margin:9px 0;line-height:1.85}.round-details .a{color:#42f5b5}.round-details .b{color:#75caff}
+.round-details p{margin:9px 0;line-height:1.85}.round-details .a{color:#42f5b5}.round-details .b{color:#ff646e}
 .detail-final{border-top:1px solid #6b5331;padding-top:8px}
 .victory-page[hidden]{display:none!important}
 body.on-victory .wrap>.view-panel,body.on-victory .wrap>.bottom-nav{display:none!important}
@@ -359,14 +416,11 @@ body.on-victory .victory-page{display:flex!important}
 .victory-box{border:1px solid #c99b46;border-radius:24px;padding:38px 15px;background:radial-gradient(circle at 50% 0%,#49361e,#11161b 70%);box-shadow:0 16px 48px #0008}
 .victory-box .win-title{font-size:clamp(30px,8vw,46px)}.victory-box .win-crowns{font-size:42px;margin-bottom:14px}
 .victory-scores{display:flex;align-items:center;justify-content:space-evenly;gap:12px;border:1px solid #8c703d;border-radius:18px;padding:18px;background:#151a20}
-.victory-scores div{display:flex;flex-direction:column;gap:6px;font-weight:800}.victory-scores strong{font-size:42px;font-family:'Reem Kufi',sans-serif}.victory-scores .a{color:#42f5b5}.victory-scores .b{color:#75caff}.victory-scores .vs{color:#d9b974}
+.victory-scores div{display:flex;flex-direction:column;gap:6px;font-weight:800}.victory-scores strong{font-size:42px;font-family:'Reem Kufi',sans-serif}.victory-scores .a{color:#42f5b5}.victory-scores .b{color:#ff646e}.victory-scores .vs{color:#d9b974}
 </style>
 <div class="wrap" dir="rtl" lang="ar">
 <div class="view-panel" id="mainView">
-<div class="top">
-<h1>حاسبة البلوت</h1>
-<label class="target">اللعب إلى <input id="target" inputmode="numeric" max="999" min="10" type="number" value="152"/></label>
-</div>
+<input id="target" type="hidden" value="152"/>
 
 <section aria-label="نتيجة اللعبة" class="result-section" hidden="" id="resultSection">
 <div class="banner" hidden="" id="banner"></div>
@@ -763,7 +817,7 @@ body.on-victory .victory-page{display:flex!important}
   var ARCHIVE_KEY="baloot-archive-v1";
   function getArchive(){try{return JSON.parse(localStorage.getItem(ARCHIVE_KEY)||"[]")||[];}catch(e){return [];}}
   function renderArchive(){var list=$("archiveList"),games=getArchive();if(!games.length){list.innerHTML='<p class="empty">لا توجد لعبات سابقة بعد.</p>';return;}
-    list.innerHTML=games.map(function(g,i){return '<div class="archive-item"><strong>لعبة '+(games.length-i)+'</strong><div class="hint">'+esc(g.date)+'</div><div>'+esc(g.names[0])+' <b style="color:#42f5b5">'+g.scores[0]+'</b> — '+esc(g.names[1])+' <b style="color:#75caff">'+g.scores[1]+'</b></div><div class="hint">الفائز: '+esc(g.names[g.winner])+' · '+g.rounds.length+' جولة</div><button class="ghost danger" type="button" data-delete="'+i+'">حذف هذه اللعبة</button></div>';}).join('');}
+    list.innerHTML=games.map(function(g,i){return '<div class="archive-item"><strong>لعبة '+(games.length-i)+'</strong><div class="hint">'+esc(g.date)+'</div><div>'+esc(g.names[0])+' <b style="color:#42f5b5">'+g.scores[0]+'</b> — '+esc(g.names[1])+' <b style="color:#ff646e">'+g.scores[1]+'</b></div><div class="hint">الفائز: '+esc(g.names[g.winner])+' · '+g.rounds.length+' جولة</div><button class="ghost danger" type="button" data-delete="'+i+'">حذف هذه اللعبة</button></div>';}).join('');}
   $("archiveList").addEventListener("click",function(e){var b=e.target.closest('[data-delete]');if(!b)return;var i=Number(b.getAttribute('data-delete'));if(!confirm('حذف هذه اللعبة من السجل؟'))return;var games=getArchive();games.splice(i,1);localStorage.setItem(ARCHIVE_KEY,JSON.stringify(games));renderArchive();});
   $("clearArchive").addEventListener("click",function(){if(!confirm('هل تريد حذف جميع اللعبات السابقة نهائيًا؟'))return;localStorage.removeItem(ARCHIVE_KEY);renderArchive();});
   Array.prototype.forEach.call(document.querySelectorAll('.bottom-nav button'),function(b){b.addEventListener('click',function(){var v=b.getAttribute('data-view');['main','archive','help'].forEach(function(n){$(n+'View').hidden=n!==v;});Array.prototype.forEach.call(document.querySelectorAll('.bottom-nav button'),function(x){x.removeAttribute('aria-current');});b.setAttribute('aria-current','page');if(v==='archive')renderArchive();window.scrollTo({top:0,behavior:'smooth'});});});
